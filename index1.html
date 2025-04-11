@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Playground - Join Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 40px rgba(0, 255, 255, 0.2);
+      width: 350px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      background: #00ffe1;
+      color: #000;
+      border: none;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0ff;
+    }
+
+    .popup {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #202032;
+      padding: 25px 40px;
+      border-radius: 12px;
+      color: #fff;
+      display: none;
+      box-shadow: 0 0 20px #00ffe1;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Join AI Playground</h2>
+    <form id="playgroundForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <input type="int" id="Phonenumber" placeholder="Contact " required>
+      <select id="interest" required>
+        <option value="" disabled selected>Choose Interest</option>
+        <option value="AI Agent">AI Agent</option>
+        <option value="Automation">Automation</option>
+        <option value="Workflow">Workflow</option>
+        <option value="Physics Problem Solver">Physics Solver</option>
+      </select>
+      <button type="submit">Join Now</button>
+    </form>
+  </div>
+
+  <div id="popup" class="popup">
+    🎉 Successfully Joined AI Playground!
+  </div>
+
+  <script>
+    document.getElementById('playgroundForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const interest = document.getElementById('interest').value;
+
+      const airtableApiKey = 'patpZuHwqpCQ9tFbf.c86305fc46c023d48eb3869d74cfbc6f4ac3872d0e99df2c1728a39377bfb37d';
+      const baseId = 'appT6FS6KDAV6KlD6';
+      const tableName = 'AI Playground';
+
+      const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+      const data = {
+        records: [{
+          fields: {
+            Name: name,
+            Email: email,
+            Phonenumber:Phonenumber,
+            Interest: interest
+          }
+        }]
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${airtableApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        document.getElementById('popup').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('popup').style.display = 'none';
+          document.getElementById('playgroundForm').reset();
+        }, 3000);
+      } else {
+        alert('Failed to submit. Please check credentials.');
+      }
+    });
+  </script>
+
+</body>
+</html>
