@@ -8,52 +8,37 @@
     body {
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
       font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      color: #fff;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     .form-container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
       border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 4px 40px rgba(0, 255, 255, 0.2);
-      width: 350px;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+      width: 95%;
+      max-width: 750px;
+      margin-top: 60px;
+      margin-bottom: 40px;
     }
 
     h2 {
       text-align: center;
       color: #fff;
+      font-size: 28px;
       margin-bottom: 20px;
     }
 
-    input, select {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      background: #00ffe1;
-      color: #000;
-      border: none;
-      padding: 12px;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #0ff;
+    .airtable-embed {
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00ffe1;
     }
 
     .popup {
@@ -68,75 +53,75 @@
       display: none;
       box-shadow: 0 0 20px #00ffe1;
       z-index: 1000;
+      font-size: 18px;
+    }
+
+    .cta-button {
+      background: #00ffe1;
+      color: #000;
+      padding: 12px 30px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 30px;
+    }
+
+    .cta-button:hover {
+      background-color: #0ff;
+      box-shadow: 0 0 12px #0ff;
+    }
+
+    footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 14px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
 
-  <div class="form-container">
-    <h2>Join AI Playground</h2>
-    <form id="playgroundForm">
-      <input type="text" id="name" placeholder="Your Name" required>
-      <input type="email" id="email" placeholder="Your Email" required>
-      <input type="int" id="Phonenumber" placeholder="Contact " required>
-      <select id="interest" required>
-        <option value="" disabled selected>Choose Interest</option>
-        <option value="AI Agent">AI Agent</option>
-        <option value="Automation">Automation</option>
-        <option value="Workflow">Workflow</option>
-        <option value="Physics Problem Solver">Physics Solver</option>
-      </select>
-      <button type="submit">Join Now</button>
-    </form>
+  <h2>Join the AI Playground with AIHUB</h2>
+
+  <!-- CTA Button (can link to scroll into view or be used in other areas) -->
+  <button class="cta-button" onclick="scrollToForm()">Try AI Playground with AIHUB</button>
+
+  <!-- Glassmorphic Form Container -->
+  <div class="form-container" id="joinForm">
+    <iframe class="airtable-embed"
+      src="https://airtable.com/embed/appT6FS6KDAV6KlD6/pagIRDJVzagytnq3E/form"
+      frameborder="0"
+      onmousewheel=""
+      width="100%"
+      height="533"
+      style="background: transparent; border: 1px solid #ccc;">
+    </iframe>
   </div>
 
   <div id="popup" class="popup">
     🎉 Successfully Joined AI Playground!
   </div>
 
+  <footer>
+    &copy; 2025 AIHUB Station. All rights reserved.
+  </footer>
+
   <script>
-    document.getElementById('playgroundForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
+    function scrollToForm() {
+      const formSection = document.getElementById("joinForm");
+      formSection.scrollIntoView({ behavior: "smooth" });
+    }
 
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const interest = document.getElementById('interest').value;
-
-      const airtableApiKey = 'patpZuHwqpCQ9tFbf.c86305fc46c023d48eb3869d74cfbc6f4ac3872d0e99df2c1728a39377bfb37d';
-      const baseId = 'appT6FS6KDAV6KlD6';
-      const tableName = 'AI Playground';
-
-      const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
-      const data = {
-        records: [{
-          fields: {
-            Name: name,
-            Email: email,
-            Phonenumber:Phonenumber,
-            Interest: interest
-          }
-        }]
-      };
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${airtableApiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-
-      if (response.ok) {
-        document.getElementById('popup').style.display = 'block';
-        setTimeout(() => {
-          document.getElementById('popup').style.display = 'none';
-          document.getElementById('playgroundForm').reset();
-        }, 3000);
-      } else {
-        alert('Failed to submit. Please check credentials.');
-      }
-    });
+    // OPTIONAL: if you want to show popup manually after success, you can use this function
+    function showPopup() {
+      const popup = document.getElementById("popup");
+      popup.style.display = "block";
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 3000);
+    }
   </script>
 
 </body>
